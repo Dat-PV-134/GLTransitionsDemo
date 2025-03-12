@@ -42,6 +42,11 @@ class MainActivity : AppCompatActivity() {
                 myRenderer.startTransition()
             }
 
+            binding.btnTransition3.setOnClickListener {
+                myRenderer.changeProgram(3)
+                myRenderer.startTransition()
+            }
+
             binding.btnRestore.setOnClickListener {
                 myRenderer.restoreState()
             }

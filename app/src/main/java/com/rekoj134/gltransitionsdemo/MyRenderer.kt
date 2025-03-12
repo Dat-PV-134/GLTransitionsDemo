@@ -2,6 +2,7 @@ package com.rekoj134.gltransitionsdemo
 
 import android.content.Context
 import android.opengl.GLES20.GL_TEXTURE1
+import android.opengl.GLES20.GL_TEXTURE2
 import android.opengl.GLES32
 import android.opengl.GLES32.GL_COLOR_BUFFER_BIT
 import android.opengl.GLES32.GL_TEXTURE0
@@ -38,6 +39,7 @@ class MyRenderer(private val context: Context) : Renderer {
 
     private var program1 = 0
     private var program2 = 0
+    private var program3 = 0
     private var curProgram = 1
     private var VBO = 0
     private var VAO = 0
@@ -48,6 +50,7 @@ class MyRenderer(private val context: Context) : Renderer {
 
     private var texture1: Int = 0
     private var texture2: Int = 0
+    private var displacementMap: Int = 0
 
     private var isDoneTransition = true
     private var isRestoring = false
@@ -56,23 +59,27 @@ class MyRenderer(private val context: Context) : Renderer {
         val vertexShaderSource = ShaderReader.readTextFileFromResource(context, when(program) {
             1 -> R.raw.transition_1_vertex_shader
             2 -> R.raw.transition_2_vertex_shader
+            3 -> R.raw.transition_3_vertex_shader
             else -> R.raw.transition_1_vertex_shader
         })
         val fragmentShaderSource =
             ShaderReader.readTextFileFromResource(context, when(program) {
                 1 -> R.raw.transition_1_fragment_shader
                 2 -> R.raw.transition_2_fragment_shader
+                3 -> R.raw.transition_3_fragment_shader
                 else -> R.raw.transition_1_fragment_shader
             })
         when (program) {
             1 -> program1 = ShaderHelper.buildProgram(vertexShaderSource, fragmentShaderSource)
             2 -> program2 = ShaderHelper.buildProgram(vertexShaderSource, fragmentShaderSource)
+            3 -> program3 = ShaderHelper.buildProgram(vertexShaderSource, fragmentShaderSource)
         }
 
         if (LoggerConfig.ON) {
             when (program) {
                 1 -> ShaderHelper.validateProgram(program1)
                 2 -> ShaderHelper.validateProgram(program2)
+                3 -> ShaderHelper.validateProgram(program3)
             }
         }
     }
@@ -81,6 +88,7 @@ class MyRenderer(private val context: Context) : Renderer {
         when (program) {
             1 -> curProgram = program1
             2 -> curProgram = program2
+            3 -> curProgram = program3
         }
         GLES32.glUseProgram(curProgram)
         // Load texture and set texture uniform by texture unit
@@ -88,20 +96,28 @@ class MyRenderer(private val context: Context) : Renderer {
         GLES32.glUniform1i(glGetUniformLocation(curProgram, "texture1"), 0)
         texture2 = TextureHelper.loadTexture(context, "test_images/end.jpg")
         GLES32.glUniform1i(glGetUniformLocation(curProgram, "texture2"), 1)
+
+        if (program == 3) {
+            displacementMap = TextureHelper.loadTexture(context, "test_images/transition_3.png")
+            GLES32.glUniform1i(glGetUniformLocation(curProgram, "displacementMap"), 2)
+        }
     }
 
     fun changeProgram(program: Int) {
         when (program) {
             1 -> curProgram = program1
             2 -> curProgram = program2
+            3 -> curProgram = program3
         }
     }
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         buildProgram(1)
         buildProgram(2)
+        buildProgram(3)
         useProgramAndLoadTexture(1)
         useProgramAndLoadTexture(2)
+        useProgramAndLoadTexture(3)
 
         val vaoBuffer = IntBuffer.allocate(1)
         val vboBuffer = IntBuffer.allocate(1)
@@ -194,6 +210,11 @@ class MyRenderer(private val context: Context) : Renderer {
         glBindTexture(GL_TEXTURE_2D, texture1)
         glActiveTexture(GL_TEXTURE1)
         glBindTexture(GL_TEXTURE_2D, texture2)
+
+        if (curProgram == program3) {
+            glActiveTexture(GL_TEXTURE2)
+            glBindTexture(GL_TEXTURE_2D, displacementMap)
+        }
 
         GLES32.glBindVertexArray(VAO)
         GLES32.glDrawElements(GLES32.GL_TRIANGLES, indices.size, GLES32.GL_UNSIGNED_INT, 0)

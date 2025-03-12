@@ -1,81 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/black"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/constraintBottomSurfaceView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="1dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/constraintBottomSurfaceView"
+    <android.opengl.GLSurfaceView
+        android:id="@+id/myGlSurfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="36dp"
+        app:layout_constraintBottom_toBottomOf="@id/constraintBottomSurfaceView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/black"
+        android:clipToPadding="false"
+        android:paddingTop="36dp"
+        android:paddingBottom="64dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/myGlSurfaceView"
+        tools:context=".MainActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.6" />
+            android:layout_height="wrap_content">
 
-        <android.opengl.GLSurfaceView
-            android:id="@+id/myGlSurfaceView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="36dp"
-            app:layout_constraintBottom_toBottomOf="@id/constraintBottomSurfaceView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/btnTransition1"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginHorizontal="46dp"
+                android:layout_marginTop="46dp"
+                android:background="#9AF87F"
+                android:gravity="center"
+                android:text="Transition 1"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/myGlSurfaceView" />
 
-        <TextView
-            android:id="@+id/btnTransition1"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginHorizontal="46dp"
-            android:layout_marginTop="46dp"
-            android:background="#9AF87F"
-            android:gravity="center"
-            android:text="Transition 1"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/myGlSurfaceView" />
+            <TextView
+                android:id="@+id/btnTransition2"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginHorizontal="46dp"
+                android:layout_marginTop="26dp"
+                android:background="#FB74BF"
+                android:gravity="center"
+                android:text="Transition 2"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnTransition1" />
 
-        <TextView
-            android:id="@+id/btnTransition2"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginHorizontal="46dp"
-            android:layout_marginTop="26dp"
-            android:background="#FB74BF"
-            android:gravity="center"
-            android:text="Transition 2"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnTransition1" />
+            <TextView
+                android:id="@+id/btnTransition3"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginHorizontal="46dp"
+                android:layout_marginTop="26dp"
+                android:background="#FD5D5D"
+                android:gravity="center"
+                android:text="Transition 3"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnTransition2" />
 
-        <TextView
-            android:id="@+id/btnRestore"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginHorizontal="46dp"
-            android:layout_marginTop="26dp"
-            android:background="#A180FF"
-            android:gravity="center"
-            android:text="Restore"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnTransition2" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+            <TextView
+                android:id="@+id/btnRestore"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginHorizontal="46dp"
+                android:layout_marginTop="26dp"
+                android:background="#A180FF"
+                android:gravity="center"
+                android:text="Restore"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnTransition3" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 
