@@ -19,14 +19,14 @@
         android:id="@+id/myGlSurfaceView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="36dp"
         app:layout_constraintBottom_toBottomOf="@id/constraintBottomSurfaceView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/btnSelectImageOne"
+        android:id="@+id/btnTransition1"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginHorizontal="46dp"
@@ -40,4 +40,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/myGlSurfaceView" />
+
+    <TextView
+        android:id="@+id/btnRestore"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginHorizontal="46dp"
+        android:layout_marginTop="26dp"
+        android:background="#A180FF"
+        android:gravity="center"
+        android:text="Restore"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnTransition1" />
 </androidx.constraintlayout.widget.ConstraintLayout>

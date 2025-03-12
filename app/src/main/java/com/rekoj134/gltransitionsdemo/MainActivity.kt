@@ -31,6 +31,14 @@ class MainActivity : AppCompatActivity() {
             binding.myGlSurfaceView.setEGLContextClientVersion(3)
             binding.myGlSurfaceView.setRenderer(myRenderer)
             rendererSet = true
+
+            binding.btnTransition1.setOnClickListener {
+                myRenderer.startTransition()
+            }
+
+            binding.btnRestore.setOnClickListener {
+                myRenderer.restoreState()
+            }
         } else {
             Toast.makeText(this@MainActivity, "This device doesn't support OpenGL ES 3.2", Toast.LENGTH_SHORT).show()
             return
