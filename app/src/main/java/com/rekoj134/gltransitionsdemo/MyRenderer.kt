@@ -36,7 +36,9 @@ class MyRenderer(private val context: Context) : Renderer {
         0, 3, 1
     )
 
-    private var program = 0
+    private var program1 = 0
+    private var program2 = 0
+    private var curProgram = 1
     private var VBO = 0
     private var VAO = 0
     private var EBO = 0
@@ -50,21 +52,56 @@ class MyRenderer(private val context: Context) : Renderer {
     private var isDoneTransition = true
     private var isRestoring = false
 
-    override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
-        val vertexShaderSource = ShaderReader.readTextFileFromResource(context, R.raw.transition_2_vertex_shader)
+    private fun buildProgram(program: Int) {
+        val vertexShaderSource = ShaderReader.readTextFileFromResource(context, when(program) {
+            1 -> R.raw.transition_1_vertex_shader
+            2 -> R.raw.transition_2_vertex_shader
+            else -> R.raw.transition_1_vertex_shader
+        })
         val fragmentShaderSource =
-            ShaderReader.readTextFileFromResource(context, R.raw.transition_1_fragment_shader)
-        program = ShaderHelper.buildProgram(vertexShaderSource, fragmentShaderSource)
-        if (LoggerConfig.ON) {
-            ShaderHelper.validateProgram(program)
+            ShaderReader.readTextFileFromResource(context, when(program) {
+                1 -> R.raw.transition_1_fragment_shader
+                2 -> R.raw.transition_2_fragment_shader
+                else -> R.raw.transition_1_fragment_shader
+            })
+        when (program) {
+            1 -> program1 = ShaderHelper.buildProgram(vertexShaderSource, fragmentShaderSource)
+            2 -> program2 = ShaderHelper.buildProgram(vertexShaderSource, fragmentShaderSource)
         }
-        GLES32.glUseProgram(program)
 
+        if (LoggerConfig.ON) {
+            when (program) {
+                1 -> ShaderHelper.validateProgram(program1)
+                2 -> ShaderHelper.validateProgram(program2)
+            }
+        }
+    }
+
+    private fun useProgramAndLoadTexture(program: Int) {
+        when (program) {
+            1 -> curProgram = program1
+            2 -> curProgram = program2
+        }
+        GLES32.glUseProgram(curProgram)
         // Load texture and set texture uniform by texture unit
         texture1 = TextureHelper.loadTexture(context, "test_images/start.jpg")
-        GLES32.glUniform1i(glGetUniformLocation(program, "texture1"), 0)
+        GLES32.glUniform1i(glGetUniformLocation(curProgram, "texture1"), 0)
         texture2 = TextureHelper.loadTexture(context, "test_images/end.jpg")
-        GLES32.glUniform1i(glGetUniformLocation(program, "texture2"), 1)
+        GLES32.glUniform1i(glGetUniformLocation(curProgram, "texture2"), 1)
+    }
+
+    fun changeProgram(program: Int) {
+        when (program) {
+            1 -> curProgram = program1
+            2 -> curProgram = program2
+        }
+    }
+
+    override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
+        buildProgram(1)
+        buildProgram(2)
+        useProgramAndLoadTexture(1)
+        useProgramAndLoadTexture(2)
 
         val vaoBuffer = IntBuffer.allocate(1)
         val vboBuffer = IntBuffer.allocate(1)
@@ -135,6 +172,8 @@ class MyRenderer(private val context: Context) : Renderer {
     override fun onDrawFrame(gl: GL10?) {
         glClear(GL_COLOR_BUFFER_BIT)
 
+        GLES32.glUseProgram(curProgram)
+
         if (!isDoneTransition) {
             timeElapsed += animationSpeed * 0.016f
         } else if (isRestoring) {
@@ -149,7 +188,7 @@ class MyRenderer(private val context: Context) : Renderer {
             isRestoring = false
         }
 
-        GLES32.glUniform1f(glGetUniformLocation(program, "progress"), timeElapsed)
+        GLES32.glUniform1f(glGetUniformLocation(curProgram, "progress"), timeElapsed)
 
         glActiveTexture(GL_TEXTURE0)
         glBindTexture(GL_TEXTURE_2D, texture1)

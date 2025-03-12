@@ -33,6 +33,12 @@ class MainActivity : AppCompatActivity() {
             rendererSet = true
 
             binding.btnTransition1.setOnClickListener {
+                myRenderer.changeProgram(1)
+                myRenderer.startTransition()
+            }
+
+            binding.btnTransition2.setOnClickListener {
+                myRenderer.changeProgram(2)
                 myRenderer.startTransition()
             }
 
